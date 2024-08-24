@@ -49,6 +49,7 @@ Begin
       AgregarElemento(pri,ult,num);
       LlenarLista(pri,ult);
       // recursividad
+      // else agregarElemento(pri,ult,100); en caso de que 100 deba procesarse
     End;
 End;
 
@@ -83,10 +84,11 @@ Var
   Minimo: Integer;
 Begin
   If l=Nil Then
-    Minimo := 999
+    Minimo := 999 //caso base
   Else
     Begin
       Minimo := CalcularMinimoRecursivo(l^.sig);
+      //recursivo
       If (l^.dato<Minimo) Then
         CalcularMinimoRecursivo := l^.dato
       Else
@@ -110,25 +112,27 @@ Var
   pri,ult: lista;
   n: Integer;
 Begin
+  //inciso A
   randomize;
   LlenarListaRecursiva(pri,ult);
-
+  //inciso B
   WriteLn('Lista impresa en orden:');
   ImprimirListaRecursiva(pri);
 
   WriteLn();
   WriteLn();
-
+  // inciso C
   WriteLn('Lista impresa al reves:');
   ImprimirListaInversaRecursiva(pri);
 
   WriteLn();
   WriteLn();
-
+  //inciso D
   WriteLn('El numero mas bajo de la lista es:');
   WriteLn(CalcularMinimoRecursivo(pri));
   WriteLn();
   WriteLn();
+  //inciso E
   WriteLn('Ingrese valor a buscar:');
   ReadLn(n);
   WriteLn(existe(pri,n));
