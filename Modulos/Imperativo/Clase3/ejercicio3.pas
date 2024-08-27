@@ -25,45 +25,28 @@ Type
 
 Procedure LeerNota(Var nota: AlumnoNota);
 Begin
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{WriteLn('Ingrese codigo de la materia:');
+  WriteLn('Ingrese codigo de la materia:');
   ReadLn(nota.CodMateria);
   WriteLn('Ingrese fecha del examen:');
   ReadLn(nota.Fecha);
   WriteLn('Ingrese nota de la materia:');
-  ReadLn(nota.Nota);}
+  ReadLn(nota.Nota);
+
+
+{
+  Para probar
   nota.CodMateria := random(30)+1;
   nota.Fecha := random(31)+1;
-  nota.Nota := random(10);
+  nota.Nota := random(10);}
 End;
 
 Procedure LeerLegajo(Var l:Integer);
 Begin
-  {WriteLn('Ingrese codigo de legajo:');
-  ReadLn(l);}
-  l := random(30);
+  WriteLn('Ingrese codigo de legajo:');
+  ReadLn(l);
+  {  para probar
+   l := random(30);
+}
 End;
 
 Procedure AgregarNota(Var l:ListaFinales; a:AlumnoNota);
@@ -111,7 +94,6 @@ Begin
       LeerLegajo(Legajo);
     End;
 End;
-
 Procedure RecorrerArbolAprobados(a: Arbol);
 Procedure RecorrerLista(l: ListaFinales; Var cant:Integer);
 Begin
@@ -146,11 +128,6 @@ Begin
       RecorrerArbolAprobados(a^.hd);
     End;
 End;
-
-
-
-
-
 Procedure CalcularImpares(a: arbol; Var c:Integer);
 Procedure RecorrerArbol(a:Arbol; Var c:Integer);
 Begin
