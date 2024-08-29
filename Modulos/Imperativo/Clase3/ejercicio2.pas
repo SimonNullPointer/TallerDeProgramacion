@@ -109,6 +109,7 @@ Begin
   If (a2 = Nil) Then
     Begin
       New(a2);
+      //podria ir un modulo
       a2^.dato.Cod := p.CodigoProducto;
       a2^.dato.Cant := p.Cantidad;
       a2^.HI := Nil;

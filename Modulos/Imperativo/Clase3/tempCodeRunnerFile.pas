@@ -1,1 +1,2 @@
-arbol2
+  // WriteLn('Ingrese codigo de legajo:');
+  // ReadLn(l);
