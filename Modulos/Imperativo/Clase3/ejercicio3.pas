@@ -152,7 +152,7 @@ Begin
       RecorrerArbolAprobados(a^.hd);
     End;
 End;
-Function esImpar(Const dato: DatoAlumno): Integer;
+Function esImpar(dato: DatoAlumno): Integer;
 Begin
   If (dato.legajo Mod 2 = 1) Then esImpar := 1
   Else esImpar := 0;
