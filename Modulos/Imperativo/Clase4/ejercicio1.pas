@@ -136,35 +136,31 @@ Begin
     End;
 End;
 
+Procedure CalcularMaximo(a:Arbol; Var Codmax:Integer);
 
-
-Function maxUnidades(a: Arbol): Integer;
-
-Var 
-  maxIzq, maxDer, codMax: Integer;
+Procedure Maximos(a:Arbol; Var codMax,cantMax:Integer);
 Begin
-  If (a = Nil) Then
-    maxUnidades := -1
-  Else
+  If (a<>Nil) Then
     Begin
-      maxIzq := maxUnidades(a^.HI);
-      maxDer := maxUnidades(a^.HD);
-
-      codMax := a^.productoID;
-
-
-      If (a^.HI <> Nil) And (a^.HI^.datosProducto.total > a^.datosProducto.total
-         ) Then
-        codMax := maxIzq
-
-      Else If (a^.HD <> Nil) And (a^.HD^.datosProducto.total > a^.datosProducto.
-              total
-              ) Then
-             codMax := maxDer;
-
-      maxUnidades := codMax;
+      Maximos(a^.HI,codMax,cantMax);
+      If (a^.datosProducto.total>cantMax) Then
+        Begin
+          cantMax := a^.datosProducto.total;
+          codMax := a^.productoID;
+        End;
+      Maximos(a^.HD,codMax,cantMax);
     End;
 End;
+
+Var 
+  cantMax: Integer;
+Begin
+  cantMax := 0;
+  Maximos(a,Codmax,cantMax);
+End;
+
+
+
 
 Function esMenor(a:Arbol; valor:Integer): Integer;
 Begin
@@ -174,7 +170,7 @@ Begin
     Begin
 
       If (a^.productoID<valor) Then
-        //then todo lo que siga es menor
+        //then todo lo que siga es menor EN HI, NO EN HD
         esMenor := 1 + esMenor(a^.HI,valor) + esMenor(a^.HD,valor)
 
       Else
@@ -193,24 +189,32 @@ Begin
   Else If (a^.productoID<p1) Then
 
 
-//si el codigo es menor al parametro 1, todo lo que esté a su izquierda sera menor ANASHe
+
+
+
+
+
+
+
+
+//si el codigo es menor al parametro 1, todo lo que esté a su izquierda sera menor 
          montoTotal := montoTotal(a^.HD,p1,p2)
   Else If (a^.productoID>p2) Then
+
+
 
 
 //lo mismo pero del otro lado, si es mayor entonces todo lo de su derecha sera mayor
          montoTotal := montoTotal(a^.HI,p1,p2)
   Else
-    //in the middle, como malcom
+    // en el medio de los parametros
     montoTotal := a^.datosProducto.Monto + montoTotal(a^.HI,p1,p2) +
                   montoTotal(a^.HD,p1,p2)
-
-
 End;
 
 Var 
   arb: Arbol;
-  menorQue,p1,p2: Integer;
+  menorQue,p1,p2,codMax: Integer;
 Begin
   randomize;
   //Inciso 1
@@ -222,7 +226,8 @@ Begin
 
   //inciso 3
   WriteLn('El codigo con mas unidades vendidas es:');
-  WriteLn(MaxUnidades(arb));
+  CalcularMaximo(arb,codMax);
+  WriteLn(codMax);
 
   // inciso 4
   WriteLn('Ingrese parametro:');
