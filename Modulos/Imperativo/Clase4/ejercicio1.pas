@@ -189,19 +189,9 @@ Begin
   Else If (a^.productoID<p1) Then
 
 
-
-
-
-
-
-
-
-
 //si el codigo es menor al parametro 1, todo lo que esté a su izquierda sera menor 
          montoTotal := montoTotal(a^.HD,p1,p2)
   Else If (a^.productoID>p2) Then
-
-
 
 
 //lo mismo pero del otro lado, si es mayor entonces todo lo de su derecha sera mayor
@@ -234,16 +224,11 @@ Begin
   ReadLn(menorQue);
   WriteLn('La cantidad de codigos menores al valor ingresado son:');
   WriteLn(esMenor(arb,menorQue));
-
   //ultimooo
-
   WriteLn('Ingrese el limite inferior (p1): ');
   ReadLn(p1);
   WriteLn('Ingrese el limite superior (p2): ');
   ReadLn(p2);
-
   WriteLn('El monto total acumulado entre el rango establecido es: ', montoTotal
           (arb,p1,p2): 0: 2);
-
-
 End.
