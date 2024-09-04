@@ -26,7 +26,11 @@ Type
     HI: Arbol;
     HD: Arbol;
   End;
-
+ListaD = ^nodoD;
+nodoD = record
+dato:Integer;
+sig:ListaD;
+end;
 
 Procedure generarEstructura(Var arb:Arbol);
 
@@ -53,17 +57,17 @@ Procedure insertarLista(Var l:Lista; r:Reclamo);
 
 Var 
   aux: Lista;
-Begin
+Begin //insertarLista
   New(aux);
   aux^.dato := r;
   aux^.sig := l;
   l := aux;
 End;
-Begin
+Begin //agregarReclamoLista 
   insertarLista(arb^.dato.ListaReclamos,r);
   arb^.dato.Cantidad := arb^.dato.Cantidad + 1;
 End;
-Begin
+Begin //agregarReclamo
   If (arb=Nil) Then
     Begin
       inicializarDatos(arb,r);
@@ -78,7 +82,7 @@ End;
 
 Var 
   r: Reclamo;
-Begin
+Begin //generarEstructura
   arb := Nil;
   leerReclamo(r);
   While (r.IDreclamo<>0) Do
@@ -93,12 +97,9 @@ Begin
   If (arb <> Nil) Then
     Begin
       recorrerArbolInorden(arb^.HI);
-      // Recorre el subárbol izquierdo
       writeln('DNI: ', arb^.dato.DNI, ' - Cantidad de Reclamos: ', arb^.dato.
               Cantidad);
-      // Procesa el nodo actual
       recorrerArbolInorden(arb^.HD);
-      // Recorre el subárbol derecho
     End;
 End;
 
@@ -154,15 +155,52 @@ Begin
   ));
 End;
 
+procedure incisoD(arb:arbol; var l:listaD);
+procedure recorrerArbolD(arb:arbol; var l:listaD;n:Integer);
+procedure RecorrerListaReclamos(l:lista;var lD:listaD; n:integer);
+procedure agregarListaD(var l:listaD;cod:Integer );
+var
+aux:listaD;
+begin
+new(aux);
+aux^.dato:= cod;
+aux^.sig:= l;
+l:= aux;
+end;
+begin 
+while(l<>nil) do begin
+if (l^.dato.anio=n)then 
+agregarListaD(lD,l^.dato.IDreclamo);
+l:= l^.sig;
+end;
 
+end;
+begin
+if (arb<>nil) then
+begin
+recorrerArbolD(arb^.HI,l,n);
+RecorrerListaReclamos(arb^.dato.ListaReclamos,l,n);
+RecorrerArbolD(arb^.HD,l,n);
+end;
+end;
+var 
+n:integer;
+begin
+l:=Nil;
+WriteLn('Ingrese anio:');
+ReadLn(n);
+recorrerArbolD(arb,l,n);
+end;
 
 Var 
   arb: Arbol;
-
+	listaIncisoD:listaD;
 Begin
+	randomize;
   generarEstructura(arb);
   recorrerArbolInorden(arb);
 
   incisoB(arb);
   incisoC(arb);
+  incisoD(arb,listaIncisoD);
 End.
