@@ -1,4 +1,3 @@
-
 Program ejercicio2;
 
 Const 
@@ -19,7 +18,19 @@ Type
     anio: RangoAnios;
     Modelo: Cadena;
   End;
+    autoD= Record
+    patente: Integer;
+    marca: Cadena;
+    modelo: Cadena;
+  End;
 
+    listaD = ^nodoD;
+  nodoD = Record
+    dato: AutoD;
+    sig: listaD;
+  End;
+
+vectorAnios = array[RangoAnios] of listaD;
   lista = ^nodoL;
   nodoL = Record
     dato: AutoLista;
@@ -251,10 +262,114 @@ Begin
 
 End;
 
+procedure inicializarVector(var v:vectorAnios);
+var
+i:Integer;
+begin
+  for i:=minAnio to maxAnio do 
+    v[i]:= Nil;
+end;
+Procedure agregarAdelante(Var l:listaD; a:autos);
+Procedure agregar(Var aux:listaD; a:autos);
+Begin
+  aux^.dato.patente := a.patente;
+  aux^.dato.marca:= a.marca;
+  aux^.dato.Modelo := a.Modelo;
+End;
+
+Var 
+  aux: listaD;
+Begin
+  New(aux);
+  agregar(aux,a);
+  aux^.sig := l;
+  l := aux;
+End;
+
+procedure agregarVectorLista(a:arbolPatente;var v:vectorAnios);
+begin
+  if (a<>Nil) then
+  begin
+    agregarVectorLista(a^.Hi,v);
+    agregarAdelante(v[a^.dato.anio],a^.dato);
+    agregarVectorLista(a^.Hd,v);
+  end;
+end;
+
+procedure incisoD(a:arbolPatente; var v:vectorAnios);
+
+begin
+  inicializarVector(v);
+  agregarVectorLista(a,v);
+end;
+
+Procedure recorrerListaD(l: listaD);
+Begin
+  While l <> Nil Do
+    Begin
+      WriteLn('  Patente: ', l^.dato.patente, ', Marca: ', l^.dato.marca, ', Modelo: ', l^.dato.modelo);
+      l := l^.sig;
+    End;
+End;
+
+Procedure recorrerIncisoD(v: vectorAnios);
+Var
+  i: RangoAnios;
+Begin
+  For i := minAnio To maxAnio Do
+    Begin
+      WriteLn('Anio: ', i);
+      If v[i] <> Nil Then
+        recorrerListaD(v[i])
+      Else
+        WriteLn('  Sin autos registrados para este año.');
+    End;
+End;
+
+
+Procedure incisoF(a: ArbolMarca);
+
+Function buscarPatenteEnLista(l: lista; p: Integer): Cadena;
+Begin
+  While (l <> Nil) and (l^.dato.patente <> p) Do
+    l := l^.sig;
+  If l = Nil Then
+    buscarPatenteEnLista := 'Patente no encontrada'
+  Else
+    buscarPatenteEnLista := l^.dato.Modelo;
+End;
+
+function buscarPatenteEnMarcas(a:ArbolMarca; p:Integer):Cadena;
+var 
+modelo:Cadena;
+begin
+  if (a<>Nil) then
+  begin
+     modelo := buscarPatenteEnLista(a^.dato.ListaAutos, p);
+    
+    if (modelo = 'Patente no encontrada') then
+    begin
+      modelo := buscarPatenteEnMarcas(a^.hi, p);  
+      if (modelo = 'Patente no encontrada') then
+        modelo := buscarPatenteEnMarcas(a^.hd, p);  
+    end;
+    buscarPatenteEnMarcas := modelo; 
+  end 
+end;
+
+
+var 
+p:Integer;
+begin
+ WriteLn('Ingrese patente para buscar modelo:');
+  ReadLn(p);
+  WriteLn('El modelo del auto de la patente buscada es: ', buscarPatenteEnMarcas(a, p));
+end;
 
 Var 
   arbMarca: ArbolMarca;
   arbPatente: arbolPatente;
+  vector:vectorAnios;
 Begin
   randomize;
   iniciarArboles(arbMarca,arbPatente);
@@ -268,7 +383,10 @@ Begin
 
   incisoB(arbPatente);
   incisoC(arbMarca);
-
+  incisoD(arbPatente,vector);
+    recorrerIncisoD(vector);
 
   incisoE(arbPatente);
+  incisoF(arbMarca);
 End.
+
