@@ -1,0 +1,16 @@
+1. En un colegio secundario, cada alumno participa de un proyecto de ciencias. El proyecto de
+un alumno pertenece a un tópico (volcanes, vida marina, migración de las aves, etc.). Un
+mismo alumno pudo haber presentado más de un proyecto (en distintos tópicos). En la
+última hora del evento las personas visitantes pueden votar el proyecto del alumno que más
+le gustó.
+a. Realice un programa para el sistema de votación. Un voto consiste en el nombre del
+alumno y el tópico en el cual pertenece el proyecto.
+b. Almacene esta información en una estructura óptima para la búsqueda, ordenada
+por nombre de alumno. Para cada alumno almacene todos sus proyectos ordenado
+por tópico.
+c. Al finalizar la carga (se lee el alumno ‘zzz’) se debe informar:
+i. Cual fue el proyecto ganador: nombre del alumno, tópico y cantidad de
+votos.
+ii. Número de votos totales, es decir la suma de los votos de todos los
+proyectos en los que participa un alumno, ordenados alfabéticamente por
+nombre de alumno.
