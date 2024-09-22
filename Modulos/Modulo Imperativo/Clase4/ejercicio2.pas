@@ -189,13 +189,6 @@ End;
 // calcular mas chico con el arbol
 
 
-
-
-
-
-
-
-
 {Function masChico(a:Arbol): Integer;
 
 Var 

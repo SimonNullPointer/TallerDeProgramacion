@@ -257,7 +257,8 @@ Begin
   //inciso final 
   WriteLn('Ingrese promedio:');
   ReadLn(n);
-  // retornar se refiere a una estructura de datos
+
+// retornar se refiere a una estructura de datos en caso de que sea mas que un dato simple
   // informar es un Write
   procesoPromedios(arb,n,listaPromedios);
   recorrerListaPromedios(listaPromedios);
