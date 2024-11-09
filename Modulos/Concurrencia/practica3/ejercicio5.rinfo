@@ -1,0 +1,82 @@
+programa ejercicio5
+areas
+  areaR1: AreaP(4,1,4,100)
+  areaR2: AreaP(6,1,6,100)
+  areaR3: AreaP(8,1,8,100)
+  areaR4: AreaP(10,1,10,100)
+  areaCordi: AreaP(1,1,1,1)
+  ubicacionFlores: AreaPC(11,11,11,11)
+robots
+  robot robotCorredor
+  variables
+    pasos,ID,avenidaOrigen:numero
+    hayPapel:boolean
+  comenzar
+    RecibirMensaje(ID,cordi)
+    pasos:=PosCa
+    avenidaOrigen:= PosAv
+    hayPapel:= V
+    mientras (hayPapel)
+      BloquearEsquina(11,11)
+      Pos(11,11)
+      si(HayPapelEnLaEsquina)
+        tomarPapel
+        Pos(avenidaOrigen,pasos)
+        LiberarEsquina(11,11)
+        depositarPapel 
+        mover
+        pasos:= pasos+1
+      sino
+        hayPapel:= F
+        Pos(avenidaOrigen,pasos)
+        LiberarEsquina(11,11)
+    EnviarMensaje(ID,cordi)
+    EnviarMensaje(pasos,cordi)
+  fin
+  robot cordinador
+  variables
+    aux1,aux2,aux3,aux4,quienEs:numero
+  comenzar
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(3,robot3)
+    EnviarMensaje(4,robot4)
+    repetir 4
+      RecibirMensaje(quienEs,*)
+      si(quienEs = 1)
+        RecibirMensaje(aux1,robot1)
+      sino 
+        si (quienEs = 2)
+          RecibirMensaje(aux2,robot2)
+        sino 
+          si (quienEs = 3)
+            RecibirMensaje(aux3,robot3)
+          sino
+            RecibirMensaje(aux4,robot4)
+    Informar(aux1)
+    Informar(aux2)
+    Informar(aux3)
+    Informar(aux4)
+  fin
+variables
+  robot1:robotCorredor
+  robot2:robotCorredor
+  robot3:robotCorredor
+  robot4:robotCorredor
+  cordi:cordinador
+comenzar
+  AsignarArea(robot1,ubicacionFlores)
+  AsignarArea(robot2,ubicacionFlores)
+  AsignarArea(robot3,ubicacionFlores)
+  AsignarArea(robot4,ubicacionFlores)
+  AsignarArea(robot1,areaR1)
+  AsignarArea(robot2,areaR2)
+  AsignarArea(robot3,areaR3)  
+  AsignarArea(robot4,areaR4)
+  AsignarArea(cordi,areaCordi)
+  Iniciar(cordi,1,1)
+  Iniciar(robot1,4,1)
+  Iniciar(robot2,6,1)
+  Iniciar(robot3,8,1)
+  Iniciar(robot4,10,1)
+fin

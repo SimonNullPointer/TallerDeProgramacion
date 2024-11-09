@@ -1,0 +1,141 @@
+programa ejercicio1
+procesos
+  proceso depositar(E cant:numero; E av:numero; E ca:numero; E origenAv:numero; E origenCa: numero)
+  comenzar
+    Pos(av,ca)
+    repetir cant
+      depositarFlor
+    Pos(origenAv,origenCa)
+  fin
+  proceso Avanzar(ES pasos: numero)
+  comenzar
+    mientras((PosCa<100) & (pasos>0))
+      depositarFlor
+      mover 
+      pasos:= pasos-1
+  fin
+  proceso juntarFlores(E avenida:numero; E calleRecolectar:numero; ES cant:numero; E calleActual:numero)
+  comenzar
+    Pos(avenida,calleRecolectar)
+    repetir cant
+      tomarFlor
+    Pos(avenida,calleActual)
+  fin
+  proceso conexion(E id: numero;ES cantTerminados: numero; E origenAv:numero; E origenCa: numero)
+  variables
+    cantFlores,calle,avenida:numero
+  comenzar
+    si(id = 1)
+      conexionID1(cantFlores,calle,avenida,cantTerminados,origenAv,origenCa)
+    sino 
+      si(id = 2)
+        conexionID2(cantFlores,calle,avenida,cantTerminados,origenAv,origenCa)
+      sino 
+        conexionID3(cantFlores,calle,avenida,cantTerminados,origenAv,origenCa)
+  fin
+  proceso conexionID1(E cantFlores:numero; E avenida:numero;E calle:numero; ES cantTerminados:numero;E origenAv:numero;E origenCa:numero)
+  comenzar
+    RecibirMensaje(cantFlores,robotCliente1)
+    si (cantFlores<>0)
+      RecibirMensaje(avenida, robotCliente1)
+      RecibirMensaje(calle, robotCliente1)
+      depositar(cantFlores,avenida,calle,origenAv,origenCa)
+      EnviarMensaje(V,robotCliente1)
+    sino 
+      cantTerminados:= cantTerminados + 1
+  fin
+  proceso conexionID2(E cantFlores:numero; E avenida:numero;E calle:numero; ES cantTerminados:numero;E origenAv:numero;E origenCa:numero)
+  comenzar
+    RecibirMensaje(cantFlores,robotCliente2)
+    si (cantFlores<>0)
+      RecibirMensaje(avenida, robotCliente2)
+      RecibirMensaje(calle, robotCliente2)
+      depositar(cantFlores,avenida,calle,origenAv,origenCa)
+      EnviarMensaje(V,robotCliente2)
+    sino 
+      cantTerminados:= cantTerminados + 1
+  fin
+  proceso conexionID3(E cantFlores:numero; E avenida:numero;E calle:numero; ES cantTerminados:numero;E origenAv:numero;E origenCa:numero)
+  comenzar
+    RecibirMensaje(cantFlores,robotCliente3)
+    si (cantFlores<>0)
+      RecibirMensaje(avenida, robotCliente3)
+      RecibirMensaje(calle, robotCliente3)
+      depositar(cantFlores,avenida,calle,origenAv,origenCa)
+      EnviarMensaje(V,robotCliente3)
+    sino 
+      cantTerminados:= cantTerminados + 1
+  fin
+  proceso enviarMensajes(E n1:numero;E n2:numero; E n3:numero)
+  comenzar
+    EnviarMensaje(n1,robotCliente1)
+    EnviarMensaje(n2,robotCliente2)
+    EnviarMensaje(n3,robotCliente3)
+  fin
+areas
+  areaServidor: AreaP(100,100,100,100)
+  areaCliente1: AreaPC(1,1,1,100)
+  areaCliente2:AreaPC(2,1,2,100)
+  areaCliente3:AreaPC(3,1,3,100) 
+robots
+  robot clientes
+  variables
+    id,floresRandom,calleRecolectar,calleActual,avenida:numero
+    ack,noLlegue:boolean
+  comenzar
+    avenida:= PosAv
+    noLlegue:= V
+    RecibirMensaje(id,robotServidor)
+    mientras(noLlegue){calleActual<100}
+      calleActual:= PosCa
+      calleRecolectar:= calleActual+1
+      si(calleActual<100) {sacar si}
+        Random(floresRandom,1,4)
+        EnviarMensaje(id,robotServidor)
+        EnviarMensaje(floresRandom,robotServidor)
+        EnviarMensaje(avenida,robotServidor)      
+        EnviarMensaje(calleRecolectar,robotServidor)
+        RecibirMensaje(ack,robotServidor)
+        juntarFlores(PosAv,calleRecolectar,floresRandom,calleActual)
+        Avanzar(floresRandom)
+      {fuera del mientras}
+        EnviarMensaje(id,robotServidor)
+        EnviarMensaje(0,robotServidor)
+        noLlegue:=F
+  fin
+  robot servidor
+  variables
+    id,cantFlores,avenida,calle, cantTerminados,origenAv,origenCa : numero
+    terminaron:boolean
+  comenzar
+    {para empezar con flores}
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+    {}
+    {podria ir en modulo}
+    origenAv:= PosAv
+    origenCa:= PosCa
+    cantTerminados:= 0
+    enviarMensajes(1,2,3)
+    mientras(cantTerminados<3)
+      RecibirMensaje(id, *)
+      conexion(id,cantTerminados,origenAv,origenCa)
+  fin
+variables
+  robotCliente1:clientes
+  robotCliente2:clientes
+  robotCliente3:clientes
+  robotServidor:servidor
+comenzar 
+  AsignarArea(robotCliente1,areaCliente1)
+  AsignarArea(robotCliente2,areaCliente2)
+  AsignarArea(robotCliente3,areaCliente3)
+  AsignarArea(robotServidor,areaServidor)
+  AsignarArea(robotServidor,areaCliente1)
+  AsignarArea(robotServidor,areaCliente2)
+  AsignarArea(robotServidor,areaCliente3)
+  Iniciar(robotServidor,100,100)
+  Iniciar(robotCliente1,1,1)
+  Iniciar(robotCliente2,2,1)
+  Iniciar(robotCliente3,3,1)
+fin

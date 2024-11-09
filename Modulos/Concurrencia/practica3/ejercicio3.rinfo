@@ -1,0 +1,99 @@
+programa ejercicio3
+procesos 
+  proceso ganador(E cant1:numero; E cant2:numero)
+  comenzar
+    si (cant1>cant2)
+      Informar(cant1)
+    sino
+      Informar(cant2)
+  fin
+  proceso comparar(E quienEs:numero; ES cant1:numero; ES cant2:numero)
+  comenzar
+    si (quienEs = 1)
+      cant1:= cant1+1
+    sino 
+      cant2:= cant2+1
+  fin
+  proceso setRandom(ES calle:numero;ES avenida:numero)
+  variables
+    calleRandom,avenidaRandom:numero
+  comenzar
+    Random(calleRandom,2,10)
+    Random(avenidaRandom,2,10)
+    calle:= calleRandom
+    avenida:= avenidaRandom
+  fin
+  proceso inicializar(ES HallaMasFlores: boolean;ES cant1: numero;ES cant2:numero)
+  comenzar
+    HallaMasFlores:= V
+    cant1:= 0
+    cant2:= 0
+  fin
+  proceso enviarMensajes(E n1:numero; E n2:numero)
+  comenzar
+    EnviarMensaje(n1,esclavo1)
+    EnviarMensaje(n2,esclavo2)
+  fin
+areas
+  cuadrante: AreaPC(2,2,10,10)
+  areaJefe: AreaP(1,1,1,1)
+  areaEsclavo1: AreaP(2,1,2,1)
+  areaEsclavo2: AreaP(3,1,3,1)
+robots
+  robot robotJefe
+  variables
+    cant1,cant2,quienEs,calleRandom,avenidaRandom: numero
+    HallaMasFlores:boolean
+  comenzar
+    inicializar(HallaMasFlores,cant1,cant2)
+    enviarMensajes(1,2)
+    setRandom(calleRandom,avenidaRandom)
+    enviarMensajes(5,5) {enviarCalles}
+    enviarMensajes(5,5) {enviarAvenida}
+    mientras(HallaMasFlores)  
+      RecibirMensaje(HallaMasFlores,*)
+      si (HallaMasFlores)
+        RecibirMensaje(quienEs,*)
+        comparar(quienEs,cant1,cant2)
+    ganador(cant1,cant2)
+    Informar(cant1+cant2)
+  fin
+  robot robotEsclavo
+  variables
+    quienSoy,calle,avenida,calleOrigen,avenidaOrigen: numero
+    HallaFlores:boolean
+  comenzar
+    calleOrigen:= PosCa
+    avenidaOrigen:= PosAv
+    HallaFlores:= V
+    RecibirMensaje(quienSoy,jefe)
+    RecibirMensaje(calle, jefe)
+    RecibirMensaje(avenida,jefe)
+    mientras(HallaFlores)
+    {Consultar por la ultima vuelta, si el corte se tiene que recibir por el robotJefe}
+      BloquearEsquina(calle,avenida)
+      Pos(calle,avenida)
+      HallaFlores:= HayFlorEnLaEsquina
+      EnviarMensaje(HallaFlores,jefe)
+      si(HayFlorEnLaEsquina)
+        tomarFlor
+        EnviarMensaje(quienSoy,jefe)
+        {directamente me vuelvo}
+      Pos(avenidaOrigen,calleOrigen)
+      LiberarEsquina(calle,avenida)
+  fin
+variables
+  jefe: robotJefe
+  esclavo1: robotEsclavo
+  esclavo2: robotEsclavo
+comenzar
+  AsignarArea(jefe,areaJefe)
+  AsignarArea(esclavo1,areaEsclavo1)
+  AsignarArea(esclavo2,areaEsclavo2)
+  AsignarArea(esclavo1,cuadrante)
+  AsignarArea(esclavo2,cuadrante)
+  Iniciar(jefe,1,1)
+  Iniciar(esclavo1,2,1)
+  Iniciar(esclavo2,3,1)
+fin
+

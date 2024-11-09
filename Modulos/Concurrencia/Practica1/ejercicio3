@@ -1,0 +1,93 @@
+programa ejercicio3
+procesos
+  proceso procesoPrincipal(E n:numero)
+  variables
+    flores,papeles,cant,aux:numero
+  comenzar
+    cant:= 0
+    repetir 4
+      escalon(n,flores,papeles)
+      aux:= papeles - flores
+      si (aux=1)
+        cant:= cant +1
+      arriba
+      n:= n+1
+    Informar(cant)
+  fin
+  proceso escalon(E n:numero;ES flores:numero; ES papeles:numero)
+  comenzar
+    flores:= 0
+    papeles:= 0
+    repetir 2
+      medioEscalon(n,flores,papeles)
+      derecha
+    
+  fin
+  proceso medioEscalon(E pasos:numero; ES flores: numero; ES papeles: numero)
+  comenzar
+    repetir pasos
+      si (HayFlorEnLaEsquina)
+        juntarYdejarFlores(flores)
+      sino 
+        si (HayPapelEnLaEsquina)
+          juntarYdejarPapeles(papeles)
+      mover
+  fin
+  proceso juntarYdejarFlores(ES flores:numero)
+  variables
+    aux:numero
+  comenzar 
+    aux:= 0
+    tomarFlores(aux)
+    dejarFlores(aux)
+    flores:= flores + aux
+  fin
+  proceso tomarFlores(ES aux:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      aux:= aux + 1
+  fin
+  proceso dejarFlores(E aux:numero)
+  comenzar
+    repetir aux
+      depositarFlor
+  fin
+  proceso juntarYdejarPapeles(ES papeles:numero)
+  variables
+    aux:numero
+  comenzar
+    aux:= 0
+    tomarPapeles(aux)
+    dejarPapeles(aux)
+    papeles:= papeles + aux
+  fin
+  proceso tomarPapeles(ES aux:numero) 
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      aux:= aux + 1
+  fin
+  proceso dejarPapeles(E aux: numero)
+  comenzar
+    repetir aux
+      depositarPapel
+  fin
+  proceso arriba
+  comenzar
+    repetir 2
+      derecha
+  fin
+areas
+  ciudad: AreaC(1,1,100,100)
+robots
+  robot robot1
+  comenzar
+    procesoPrincipal(1)
+  fin
+variables
+  robotardo: robot1
+comenzar
+  AsignarArea(robotardo,ciudad)
+  Iniciar(robotardo,1,1)
+fin

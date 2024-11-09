@@ -1,0 +1,100 @@
+programa ejercicio2
+procesos 
+  proceso tomarPapelesRecolector(ES cant:numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      cant:= cant + 1
+      si (cant = 5)
+        depositar(cant)
+        cant:= 0
+  fin
+  proceso depositar(E cant:numero)
+  variables
+    avAux, caAux: numero
+  comenzar
+    avAux:= PosAv
+    caAux:= PosCa
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    repetir cant
+      depositarPapel
+    Pos(avAux,caAux)
+    LiberarEsquina(50,50)
+  fin
+  proceso buscarPapeles(E cant:numero; ES intentos: numero)
+  variables
+    avOrigen, caOrigen,aux:numero
+  comenzar
+    avOrigen:= PosAv
+    caOrigen:= PosCa
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    tomarPapelesConsumidor(cant,aux,intentos)
+    Pos(avOrigen,caOrigen)
+    LiberarEsquina(50,50)
+    si (aux=cant)
+      dejarPapeles(cant)
+      intentos:= 0
+  fin
+  proceso tomarPapelesConsumidor(E cant:numero; ES aux:numero; ES intentos:numero)
+  comenzar
+    aux:= 0
+    mientras(HayPapelEnLaEsquina) & (aux<cant)
+      tomarPapel
+      aux:= aux +1
+    si (aux<>cant)
+      dejarPapeles(aux)
+      intentos:= intentos + 1
+  fin
+  proceso dejarPapeles(E n: numero)
+  comenzar
+    repetir n
+      depositarPapel
+  fin
+areas
+  areaRecolector1: AreaP(5,1,5,100)
+  areaRecolector2: AreaP(10,1,10,100)
+  areaConsumidor1: AreaP(11,1,11,1)
+  areaConsumidor2:AreaP(12,1,12,1)
+  areaDeposito: AreaPC(50,50,50,50)
+robots
+  robot recolector
+  variables
+    cant:numero
+  comenzar
+    cant:= 0
+    repetir 99
+      tomarPapelesRecolector(cant)
+      mover
+    tomarPapelesRecolector(cant)
+  fin
+  robot consumidor
+  variables
+    intentos: numero
+    cant: numero
+  comenzar
+    intentos:= 0
+    mientras (intentos<8)
+      Random(cant,2,5)
+      buscarPapeles(cant,intentos)
+  fin
+variables
+  recolector1: recolector
+  recolector2: recolector
+  consumidor1: consumidor
+  consumidor2: consumidor
+comenzar
+  AsignarArea(recolector1,areaRecolector1)
+  AsignarArea(recolector2,areaRecolector2)
+  AsignarArea(consumidor1,areaConsumidor1)
+  AsignarArea(consumidor2,areaConsumidor2)
+  AsignarArea(recolector1,areaDeposito)
+  AsignarArea(consumidor1,areaDeposito)
+  AsignarArea(recolector2,areaDeposito)
+  AsignarArea(consumidor2,areaDeposito)
+  Iniciar(recolector1,5,1)
+  Iniciar(recolector2,10,1)
+  Iniciar(consumidor1,11,1)
+  Iniciar(consumidor2,12,1)
+fin

@@ -1,0 +1,170 @@
+programa ejercicio4
+procesos 
+  proceso calcularGanador(E a1:numero; E a2:numero; E a3: numero; E a4: numero)
+  variables
+    aux1,aux2,ganador: numero
+  comenzar
+    Informar(a1)
+    Informar(a2)
+    Informar(a3)
+    Informar(a4)
+    si((a1>a2) & (a1>a3))  
+      si (a1>a4)
+        Informar(a1)
+        InformarGanador(V,F,F,F)
+    sino
+      si ((a2>a3) & (a2>a4))
+        Informar(a2)
+        InformarGanador(F,V,F,F)
+      sino
+        si (a3>a4)
+          Informar(a3)
+          InformarGanador(F,F,V,F)
+        sino
+          Informar(a4)
+          InformarGanador(F,F,F,V)
+  fin
+  proceso InformarGanador(E a1:boolean;E a2:boolean;E a3:boolean;E a4:boolean)
+  comenzar
+    EnviarMensaje(a1,r1)
+    EnviarMensaje(a2,r2)
+    EnviarMensaje(a3,r3)
+    EnviarMensaje(a4,r4)
+  fin
+  proceso terminarJueguito
+  comenzar
+    EnviarMensaje(F,r1)
+    EnviarMensaje(F,r2)
+    EnviarMensaje(F,r3)
+    EnviarMensaje(F,r4)
+  fin
+  proceso inicializarContadores(ES a1:numero; ES a2:numero; ES a3: numero; ES a4: numero)
+  comenzar
+    a1:= 0
+    a2:= 0
+    a3:= 0
+    a4:= 0
+  fin
+  proceso mensajear(E num:numero)
+  comenzar
+    si(num = 1)
+      EnviarMensaje(V,r1)
+    sino 
+      si (num = 2)
+        EnviarMensaje(V,r2)
+      sino 
+        si (num = 3)
+          EnviarMensaje(V,r3)
+        sino 
+          EnviarMensaje(V,r4)
+  fin
+  proceso respuesta(E num:numero; ES a1:numero; ES a2:numero; ES a3:numero; ES a4:numero)
+  variables 
+    aux:numero
+  comenzar
+    aux:= 0
+    si (num = 1)
+      RecibirMensaje(aux,r1)
+      a1:= a1+aux
+    sino 
+      si (num = 2)
+        RecibirMensaje(aux,r2)
+        a2:= a2+aux
+      sino 
+        si (num = 3)
+          RecibirMensaje(aux,r3)
+          a3:= a3 + aux
+        sino
+          RecibirMensaje(aux,r4)
+          a4:= a4 + aux
+  fin
+  proceso enviarIDs
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+  fin
+  proceso RecolectarFloresyPapeles(E posX:numero E posY:numero; ES cant: numero)
+  comenzar
+    Pos(posX,posY)
+    tomarFlores(cant)
+    tomarPapeles(cant)
+  fin
+  proceso tomarFlores(ES cant:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      cant:=cant+1
+  fin
+  proceso tomarPapeles(ES cant: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      cant:= cant+1
+  fin
+areas
+  areaComp:AreaPC(25,25,75,75)
+  areaR1:AreaP(25,1,25,1)
+  areaR2:AreaP(30,1,30,1)
+  areaR3:AreaP(35,1,35,1)
+  areaR4:AreaP(40,1,40,1)
+  areaJefe:AreaP(1,1,1,1)
+robots
+  robot robotObrero
+  variables
+    posX,posY, RandomX,RandomY,cant,id:numero
+    algo,gane:boolean
+  comenzar
+    posX:= PosAv
+    posY:= PosCa
+    algo:= V
+    RecibirMensaje(id,fiscal)
+    mientras(algo=V)
+      RecibirMensaje(algo,fiscal)
+      si (algo)
+        cant:= 0
+        Random(RandomX,25,75)
+        Random(RandomY,25,75)
+        RecolectarFloresyPapeles(RandomX,RandomY,cant)
+        Pos(posX,posY)
+        EnviarMensaje(cant,fiscal)
+    RecibirMensaje(gane,fiscal)
+    si(gane)
+      Pos(50,50)
+  fin
+  robot jefe
+  variables
+    id1,id2,id3,id4:numero
+    aux1,aux2,aux3,aux4,aux:numero
+    num: numero
+  comenzar
+    enviarIDs
+    inicializarContadores(aux1,aux2,aux3,aux4)
+    repetir 10
+      Random(num,1,4)
+      mensajear(num)
+      respuesta(num,aux1,aux2,aux3,aux4)
+    terminarJueguito
+    calcularGanador(aux1,aux2,aux3,aux4)
+  fin
+
+variables
+  r1,r2,r3,r4:robotObrero
+  fiscal:jefe
+comenzar
+  AsignarArea(r1,areaComp)
+  AsignarArea(r2,areaComp)
+  AsignarArea(r3,areaComp)
+  AsignarArea(r4,areaComp)
+  AsignarArea(r1,areaR1)
+  AsignarArea(r2,areaR2)
+  AsignarArea(r3,areaR3)
+  AsignarArea(r4,areaR4)
+  AsignarArea(fiscal,areaJefe)
+  Iniciar(r1,25,1)
+  Iniciar(r2,30,1)
+  Iniciar(r3,35,1)
+  Iniciar(r4,40,1)
+  Iniciar(fiscal,1,1)
+fin

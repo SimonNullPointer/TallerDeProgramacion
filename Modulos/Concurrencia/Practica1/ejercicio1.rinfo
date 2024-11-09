@@ -1,0 +1,51 @@
+programa ejercicio1
+procesos
+  proceso recorrerAvenida(ES cantFlores:numero; ES cantEsqEmpty:numero)  
+  comenzar
+    cantFlores:=0
+    cantEsqEmpty:=0
+    repetir 99
+      evaluarEsquina(cantFlores,cantEsqEmpty)
+      mover
+  fin
+  proceso evaluarEsquina(ES cantFlores:numero; ES cantEsqEmpty:numero)
+  comenzar
+    si(HayFlorEnLaEsquina)
+      juntar(cantFlores)
+    sino
+      cantEsqEmpty:= cantEsqEmpty + 1
+  fin
+  proceso juntar(ES aux:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      aux:= aux+1
+  fin
+  proceso hacerInformes(E flo:numero; E calles:numero)  
+  comenzar
+    Informar(flo)
+    Informar(calles)
+  fin
+areas
+  ciudad: AreaC(1,1,100,100)
+robots
+  robot robot1
+  variables
+    flores,esquinas:numero
+  comenzar
+    recorrerAvenida(flores,esquinas)
+    evaluarEsquina(flores,esquinas)
+    hacerInformes(flores,esquinas)
+  fin
+variables
+  robot1:robot1
+  robot2:robot1
+  robot3:robot1
+comenzar
+  AsignarArea(robot1,ciudad)
+  Iniciar(robot1, 1,1)
+  AsignarArea(robot2,ciudad)
+  Iniciar(robot2, 3,1)
+  AsignarArea(robot3,ciudad)
+  Iniciar(robot3, 5, 1)
+fin

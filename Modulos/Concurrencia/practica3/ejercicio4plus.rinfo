@@ -1,0 +1,94 @@
+programa ejercicio4
+procesos
+  proceso tomarFlores(E cant:numero)
+  comenzar
+    repetir cant
+      tomarFlor
+  fin
+areas
+  esquinaConFlor: AreaPC(10,10,10,10)
+  esquinaDeposito: AreaPC(11,11,11,11)
+  esquinaJefe: AreaP(1,1,1,1)
+  esquinaR1: AreaP(9,9,9,9)
+  esquinaR2: AreaP(9,10,9,10)
+  esquinaR3: AreaP(9,11,9,11)
+  esquinaR4: AreaP(9,12,9,12)
+robots
+  robot robotEsclavo
+  variables
+    quienSoy, origenCalle, origenAvenida:numero
+    hayFlor:boolean
+  comenzar
+    origenCalle:= PosCa
+    origenAvenida:= PosAv
+    RecibirMensaje(quienSoy,jefe)
+    hayFlor:= V 
+    mientras(hayFlor)
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      hayFlor:= HayFlorEnLaEsquina
+      EnviarMensaje(hayFlor,jefe)
+      si (hayFlor)
+        tomarFlor
+        Pos(origenAvenida,origenCalle)
+        LiberarEsquina(10,10)
+        BloquearEsquina(11,11)
+        Pos(11,11)
+        depositarFlor
+        Pos(origenAvenida,origenCalle)
+        LiberarEsquina(11,11)
+      sino
+        Pos(origenAvenida,origenCalle)
+        LiberarEsquina(10,10)
+    EnviarMensaje(quienSoy,jefe)
+  fin
+  robot robotJefe
+  variables
+    flores: boolean
+    cant,ultimo:numero
+  comenzar
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(3,robot3)
+    EnviarMensaje(4,robot4)
+    cant:= 0
+    RecibirMensaje(flores,*)
+    si (flores)
+      mientras(flores)
+        cant:= cant+1
+        RecibirMensaje(flores,*)
+    repetir 3
+      RecibirMensaje(flores,*) {consultar como puedo optimizar}
+    repetir 4
+      RecibirMensaje(ultimo,*)
+    Informar(ultimo)
+    Pos(11,11)
+    tomarFlores(cant)
+  fin
+variables
+  robot1: robotEsclavo
+  robot2: robotEsclavo
+  robot3: robotEsclavo
+  robot4: robotEsclavo
+  jefe: robotJefe
+comenzar
+  AsignarArea(robot1,esquinaR1)
+  AsignarArea(robot2,esquinaR2)
+  AsignarArea(robot3,esquinaR3)
+  AsignarArea(robot4,esquinaR4)
+  AsignarArea(jefe,esquinaJefe)
+  AsignarArea(robot1,esquinaConFlor)
+  AsignarArea(robot2,esquinaConFlor)
+  AsignarArea(robot3,esquinaConFlor)
+  AsignarArea(robot4,esquinaConFlor)
+  AsignarArea(robot1,esquinaDeposito)
+  AsignarArea(robot2,esquinaDeposito)
+  AsignarArea(robot3,esquinaDeposito)
+  AsignarArea(robot4,esquinaDeposito)
+  AsignarArea(jefe,esquinaDeposito)
+  Iniciar(robot1,9,9)
+  Iniciar(robot2,9,10)
+  Iniciar(robot3,9,11)
+  Iniciar(robot4,9,12)
+  Iniciar(jefe,1,1)
+fin

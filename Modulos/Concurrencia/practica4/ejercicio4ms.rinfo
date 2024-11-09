@@ -1,0 +1,135 @@
+programa ejercicio4
+procesos
+  proceso recogerFlores
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso recogerPapeles
+  comenzar
+    mientras(HayPapelEnLaBolsa)
+      tomarPapel
+  fin
+  proceso vaciarBolsa
+  comenzar
+    mientras((HayPapelEnLaBolsa) | (HayFlorEnLaBolsa))
+      si (HayFlorEnLaBolsa)
+        depositarFlor
+      si (HayPapelEnLaBolsa)
+        depositarPapel
+  fin
+  proceso generarTarea(ES calle:numero; ES avenida: numero;ES tarea:numero)
+  variables
+    c,v,t:numero
+  comenzar
+    Random(t,1,3)
+    Random(c,2,100)
+    Random(v,2,100)
+    avenida:= v
+    calle:= c
+    tarea:= t
+  fin
+  proceso EnviarTareaR1(E calle:numero; E avenida:numero; E tarea:numero)
+  comenzar
+    EnviarMensaje(tarea, robotEsclavo1)
+    EnviarMensaje(calle, robotEsclavo1)
+    EnviarMensaje(avenida, robotEsclavo1)
+  fin
+  proceso EnviarTareaR2(E calle:numero; E avenida:numero; E tarea:numero)
+  comenzar
+    EnviarMensaje(tarea, robotEsclavo2)
+    EnviarMensaje(calle, robotEsclavo2)
+    EnviarMensaje(avenida, robotEsclavo2)
+  fin
+  proceso terminarTarea(E n:numero)
+  comenzar
+    EnviarMensaje(n, robotEsclavo1)
+    EnviarMensaje(n, robotEsclavo2)
+  fin
+  proceso recibirParametros(ES calleIr:numero; ES avenidaIr:numero)
+  comenzar
+    RecibirMensaje(calleIr, robotMaestro)
+    RecibirMensaje(avenidaIr, robotMaestro)
+  fin
+  proceso ir(E calle:numero;E av:numero)
+  comenzar
+    BloquearEsquina(av,calle)
+    Pos(av,calle)
+  fin
+  proceso volver(E calleAct:numero; E avAct:numero; E caOrigen:numero; E avOrigen:numero)
+  comenzar
+    Pos(avOrigen,caOrigen)
+    LiberarEsquina(avAct,calleAct)
+  fin
+  
+  proceso analizarTarea(E tarea:numero; ES hallaTareas:boolean)
+  variables
+    calleAux,avenidaAux, calleIr,avenidaIr: numero
+  comenzar
+    si(tarea = 4)
+      hallaTareas:= F
+    sino 
+      recibirParametros(calleIr,avenidaIr)
+      calleAux:= PosCa
+      avenidaAux:= PosAv
+      ir(calleIr,avenidaIr)
+      si(tarea= 1)
+        recogerFlores
+      sino
+        si (tarea=2)
+          recogerPapeles
+        sino
+          vaciarBolsa
+      volver(calleIr,avenidaIr,calleAux,avenidaAux)
+  fin
+  proceso tareaFinalizada(ES tareaCompleta:boolean)
+  comenzar
+    repetir 2
+      RecibirMensaje(tareaCompleta,*)
+  fin
+  
+areas
+  areaMaestro: AreaP(1,1,1,1)
+  areaInicioEsclavo1: AreaP(2,1,2,1)
+  areaInicioEsclavo2: AreaP(3,1,3,1)
+  areaTrabajos: AreaPC(2,2,100,100)
+robots
+  robot esclavo
+  variables
+    hallaTareas:boolean
+    tarea:numero
+  comenzar
+    hallaTareas:= V
+    mientras(hallaTareas)
+      RecibirMensaje(tarea,robotMaestro)
+      analizarTarea(tarea,hallaTareas)
+      EnviarMensaje(V,robotMaestro)
+  fin
+  robot maestro
+  variables
+    calle,avenida,tarea:numero
+    tareaCompleta:boolean
+  comenzar
+    repetir 10
+      generarTarea(calle,avenida,tarea)
+      EnviarTareaR1(calle,avenida,tarea)
+      generarTarea(calle,avenida,tarea)
+      EnviarTareaR2(calle,avenida,tarea)
+    terminarTarea(4)
+    tareaFinalizada(tareaCompleta)
+  fin
+  
+variables
+  robotEsclavo1: esclavo
+  robotEsclavo2: esclavo
+  robotMaestro: maestro
+comenzar
+  AsignarArea(robotEsclavo1,areaInicioEsclavo1)
+  AsignarArea(robotEsclavo2, areaInicioEsclavo2)
+  AsignarArea(robotMaestro,areaMaestro)
+  AsignarArea(robotEsclavo1,areaTrabajos)
+  AsignarArea(robotEsclavo2, areaTrabajos)
+  Iniciar(robotMaestro,1,1)
+  Iniciar(robotEsclavo1,2,1)
+  Iniciar(robotEsclavo2,3,1)
+fin

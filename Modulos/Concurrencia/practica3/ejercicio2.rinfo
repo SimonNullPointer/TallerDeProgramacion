@@ -1,0 +1,105 @@
+programa ejercicio2
+procesos
+  proceso juntarFlores(ES cant:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor      
+      cant:=cant+1
+  fin
+  proceso juntarPapeles(ES cant:numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      cant:=cant+1
+  fin
+  proceso escalon(E n:numero; E quienSoy:numero; ES cant:numero)
+  comenzar
+    si(n=1)
+      BloquearEsquina(16,16)
+    repetir 2
+      medioEscalon(n)
+      si(quienSoy = 1)
+        derecha
+        juntarFlores(cant)
+      sino 
+        desplazar(3)
+        juntarPapeles(cant)
+    si (quienSoy = 1)
+      desplazar(2)
+    sino
+      desplazar(2)
+  fin
+  proceso medioEscalon(E n:numero)
+  comenzar 
+    repetir n 
+      mover 
+  fin
+  proceso desplazar(E n:numero)
+  comenzar
+    repetir n
+      derecha
+  fin
+  proceso segundaParte(E qs:numero; ES cant:numero)
+  variables
+    n:numero
+  comenzar
+    n:= 2
+    repetir 4
+      escalon(n,qs,cant)
+      n:= n+1
+  fin
+  proceso primeraParte(E qs:numero; ES cant:numero)
+  variables
+    n:numero
+  comenzar
+    n:= 5
+    repetir 5
+      escalon(n,qs, cant)
+      n:= n-1
+  fin
+  proceso vuelta(E quienSoy:numero)
+  comenzar
+    EnviarMensaje(quienSoy,nisman)
+    si (quienSoy = 1)
+      desplazar(3)
+    sino 
+      desplazar(1)
+    mover
+    LiberarEsquina(16,16)
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot corredores
+  variables
+    cant,quienSoy:numero
+  comenzar
+    cant:= 0
+    RecibirMensaje(quienSoy,nisman)
+    primeraParte(quienSoy,cant)
+    vuelta(quienSoy)
+    segundaParte(quienSoy,cant)
+    Informar(cant)
+  fin
+  robot Fiscal
+  variables
+    ganador:numero
+  comenzar
+    EnviarMensaje(1,robotCorredor1)
+    EnviarMensaje(2,robotCorredor2)
+    RecibirMensaje(ganador,*)
+    Informar(ganador)
+  fin
+variables
+  robotCorredor1: corredores
+  robotCorredor2: corredores
+  nisman: Fiscal
+comenzar
+  AsignarArea(robotCorredor1, ciudad)
+  AsignarArea(robotCorredor2, ciudad)
+  AsignarArea(nisman, ciudad)
+  Iniciar(nisman, 15,1)
+  Iniciar(robotCorredor1, 1,1)
+  Iniciar(robotCorredor2, 31,1)
+
+fin

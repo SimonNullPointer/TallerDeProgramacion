@@ -1,0 +1,67 @@
+programa ejercicio2
+procesos
+  proceso recorrerLado(E lado:numero; ES cant:numero)
+  comenzar
+    cant:= 0
+    repetir lado
+      si(HayPapelEnLaEsquina)
+        juntar(cant)
+      mover
+  fin
+  proceso juntar(ES aux:numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+areas 
+  ciudad: AreaC(1,1,100,100)
+robots
+  robot robot1
+  variables
+    papeles:numero
+  comenzar 
+    recorrerLado(5,papeles)
+    Informar(papeles)
+  fin
+  robot robot2
+  variables
+    papeles2:numero
+  comenzar
+    derecha
+    recorrerLado(5,papeles2)
+    Informar(papeles2)
+  fin
+  robot robot3
+  variables
+    papeles3:numero
+  comenzar
+    repetir 2
+      derecha
+    recorrerLado(5,papeles3)
+    Informar(papeles3)
+  fin
+  robot robot4
+  variables 
+    papeles4:numero
+  comenzar
+    repetir 3
+      derecha
+    recorrerLado(5,papeles4)
+    informar(papeles4)
+  fin
+variables 
+  robot1: robot1
+  robot2:robot2
+  robot3:robot3
+  robot4:robot4
+comenzar
+  AsignarArea(robot1,ciudad)
+  AsignarArea(robot2,ciudad)
+  AsignarArea(robot3,ciudad)
+  AsignarArea(robot4,ciudad)
+  Iniciar(robot1,10,10)
+  Iniciar(robot2,10,15)
+  Iniciar(robot3,15,15)
+  Iniciar(robot4,10,15)
+fin
+   

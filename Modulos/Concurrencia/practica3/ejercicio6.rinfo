@@ -1,0 +1,120 @@
+programa ejercicio6
+procesos
+  proceso enviarCalle(ES calle:numero)
+  variables 
+    id:numero
+  comenzar
+    RecibirMensaje(id,*)
+    si (id = 1)
+      EnviarMensaje(calle, robot1)
+    sino
+      si (id = 2)
+        EnviarMensaje(calle, robot2)
+      sino 
+        EnviarMensaje(calle,robot3)
+    calle:= calle+1
+  fin
+  proceso enviarMensajes(E n1:numero; E n2:numero; E n3:numero)
+  comenzar
+    EnviarMensaje(n1,robot1)
+    EnviarMensaje(n2,robot2)
+    EnviarMensaje(n3,robot3)
+  fin
+  proceso cuadrante(E n:numero; ES cP: numero; ES cF:numero; E id:numero)
+  comenzar
+    cP:= 0
+    cF:= 0
+    repetir 4
+      repetir n 
+        juntarPapelvFlor(cP,cF,id)
+        mover
+      derecha
+  fin
+  proceso juntarPapelvFlor(ES cP:numero; ES cF:numero; E id:numero)
+  comenzar
+    si (id = 1)
+      juntarFlores(cF)
+    sino
+      si (id = 2)
+        juntarFlores(cF)
+        juntarPapeles(cP)
+      sino
+        juntarPapeles(cP)
+  fin
+  proceso juntarFlores(ES cF:numero)    
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      cF:= cF + 1
+  fin
+  proceso juntarPapeles(ES cP:numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      cP:= cP + 1
+  fin
+  proceso recorrerVaciando(ES cF:numero; ES cP:numero; E id:numero)
+  comenzar
+    mientras((PosAv<100) & (cF+cP>0))
+      dejarPapelvDejarFlor(cF,cP,id)
+      mover 
+  fin
+  proceso dejarPapelvDejarFlor(ES cF:numero; ES cP:numero;E id:numero)
+  comenzar
+    si(id = 1)
+      depositarFlor
+      cF:= cF-1
+    sino 
+      si (id = 2)
+        si(HayPapelEnLaBolsa)
+          depositarPapel
+          cP:= cP - 1
+        si(HayFlorEnLaBolsa)
+          depositarFlor
+          cF:= cF - 1
+      sino 
+        depositarPapel
+        cP:= cP - 1
+  fin
+  
+areas
+  ciudad: AreaC(1,1,100,100)
+robots
+  robot robotRecolector
+  variables
+    id,rangoCuadrante,cantP,cantF,calle:numero
+  comenzar
+    RecibirMensaje(id,alberto)
+    RecibirMensaje(rangoCuadrante,alberto)
+    cuadrante(rangoCuadrante,cantP,cantF, id)
+    EnviarMensaje(id, alberto)
+    RecibirMensaje(calle,alberto)
+    Pos(1,calle)
+    derecha
+    recorrerVaciando(cantF,cantP,id)
+  fin
+  robot fiscal
+  variables
+    calle:numero
+  comenzar
+    calle:= 20
+    enviarMensajes(1,2,3)
+    enviarMensajes(6,10,7)
+    repetir 3
+      enviarCalle(calle)
+  fin
+variables
+  robot1:robotRecolector
+  robot2:robotRecolector
+  robot3:robotRecolector
+  alberto:fiscal
+comenzar
+  AsignarArea(robot1,ciudad)
+  AsignarArea(robot2,ciudad)
+  AsignarArea(robot3,ciudad)
+  AsignarArea(alberto,ciudad)
+  Iniciar(robot1,2,2)
+  Iniciar(robot2,5,5)
+  Iniciar(robot3,9,9)
+  Iniciar(alberto,1,1)
+fin

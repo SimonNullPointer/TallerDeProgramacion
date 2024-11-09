@@ -1,0 +1,128 @@
+programa ejemploBloqueo
+procesos
+  proceso generarRandom(ES avenida:numero;ES calle:numero; E av1:numero;E ca1:numero;E av2:numero; E ca2:numero)
+  variables
+    varAv,varCa:numero
+  comenzar
+    Random(varAv,av1,av2)
+    Random(varCa,ca1,ca2)
+    avenida:= varAv
+    calle:= varCa
+  fin
+  proceso recolectar(ES cant: numero)
+  comenzar
+    cant:=0
+    si(PosAv>5)
+      recolectarPapeles(cant)
+    sino
+      recolectarFlores(cant)
+  fin
+  proceso recolectarPapeles(ES cant:numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      cant:= cant+1
+  fin
+  proceso recolectarFlores(ES cant:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      cant:= cant+1
+  fin
+  proceso fijarPosicion(ES avenida:numero; ES calle:numero)
+  comenzar
+    calle:= PosCa
+    avenida:= PosAv
+  fin
+  proceso volver(E avenida:numero; E calle:numero)
+  comenzar
+    Pos(avenida,calle)
+  fin
+  proceso depositar(E cant:numero; E avenida:numero)
+  comenzar
+    si(avenida<=5)
+      repetir cant
+        depositarFlor
+    sino
+      repetir cant
+        depositarPapel
+  fin
+  proceso BloquearLaEsquina(E avenida:numero; E calle:numero)
+  comenzar
+    BloquearEsquina(avenida,calle)
+  fin
+  proceso LiberarLaEsquina(E avenida:numero; E calle:numero)
+  comenzar
+    LiberarEsquina(avenida,calle)
+  fin
+  proceso ir(E avenida:numero; E calle:numero)
+  comenzar
+    Pos(avenida,calle)
+  fin
+areas
+  areaFloreros: AreaPC(1,1,5,10)
+  areaPapeleros: AreaPC (6,1,10,9)
+  areaDeposito: AreaC(10,10,10,10)
+  areaPrivadaPapelero1: AreaP(8,10,8,10)
+  areaPrivadaPapelero2: AreaP(9,10,9,10)
+  areaPrivadaFlorero1: AreaP(6,10,6,10)
+  areaPrivadaFlorero2: AreaP(7,10,7,10)
+
+robots
+  robot recolectorFlores
+  variables
+    avenida,calle,cant,origenAvenida,origenCalle:numero
+  comenzar
+    fijarPosicion(origenAvenida,origenCalle)
+    repetir 5
+      generarRandom(avenida,calle,1,1,5,10)
+      BloquearLaEsquina(avenida,calle)
+      ir(avenida,calle)
+      recolectar(cant)
+      volver(origenAvenida,origenCalle)
+      LiberarLaEsquina(avenida,calle)
+      BloquearLaEsquina(10,10)
+      depositar(cant,avenida)
+      LiberarLaEsquina(10,10)
+  fin 
+  robot recolectorPapeles
+  variables
+    avenida,calle,cant,origenAvenida,origenCalle:numero
+  comenzar
+    fijarPosicion(origenAvenida,origenCalle)
+    repetir 5
+      generarRandom(avenida,calle,6,1,10,9)
+      BloquearLaEsquina(avenida,calle)
+      ir(avenida,calle)
+      recolectar(cant)
+      volver(origenAvenida,origenCalle)
+      LiberarLaEsquina(avenida,calle)
+      BloquearLaEsquina(10,10)
+      ir(10,10)
+      depositar(cant,avenida)
+      volver(origenAvenida,origenCalle)
+      LiberarLaEsquina(10,10)
+  fin 
+variables
+  robot1:recolectorFlores
+  robot2:recolectorFlores
+  robot3:recolectorPapeles
+  robot4:recolectorPapeles
+comenzar
+  AsignarArea(robot1,areaFloreros)
+  AsignarArea(robot2,areaFloreros)
+  AsignarArea(robot3,areaPapeleros)
+  AsignarArea(robot4,areaPapeleros)
+  AsignarArea(robot1,areaDeposito)
+  AsignarArea(robot2,areaDeposito)
+  AsignarArea(robot3,areaDeposito)
+  AsignarArea(robot4,areaDeposito)  
+  AsignarArea(robot1,areaPrivadaFlorero1)
+  AsignarArea(robot2,areaPrivadaFlorero2)  
+  AsignarArea(robot3,areaPrivadaPapelero1)  
+  AsignarArea(robot4,areaPrivadaPapelero2)  
+  Iniciar(robot1,6,10)
+  Iniciar(robot2,7,10)
+  Iniciar(robot3,8,10)
+  Iniciar(robot4,9,10)
+fin

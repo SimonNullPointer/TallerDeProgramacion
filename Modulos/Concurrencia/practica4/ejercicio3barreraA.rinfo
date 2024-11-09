@@ -1,0 +1,70 @@
+programa ejercicio3
+procesos
+  proceso tomarPapeles
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+  proceso enviarTerminado(E id:numero)
+  comenzar
+    si (id = 1)
+      EnviarMensaje(V,robot2)
+      EnviarMensaje(V,robot3)
+    sino 
+      si(id = 2)
+        EnviarMensaje(V, robot1)
+        EnviarMensaje(V, robot3)
+      sino
+        EnviarMensaje(V,robot1)
+        EnviarMensaje(V,robot2)
+  fin
+  
+areas
+  areaR1: AreaP(1,1,1,100)
+  areaR2:AreaP(2,1,2,100)
+  areaR3: AreaP(3,1,3,100)
+  areaCordi: AreaP(4,4,4,4)
+robots
+  robot recolector
+  variables
+    id:numero
+    ok:boolean
+  comenzar
+    RecibirMensaje(id,cordi)
+    ok:= V
+    mientras(PosCa<95)
+      repetir 5
+        tomarPapeles
+        mover
+      enviarTerminado(id)
+      repetir 2
+        RecibirMensaje(ok,*)
+    repetir 4
+      tomarPapeles
+      mover
+    tomarPapeles
+    enviarTerminado(id)
+    repetir 2
+      RecibirMensaje(ok,*)
+  fin
+  robot coordinador
+  comenzar
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(3,robot3)
+  fin
+variables
+  robot1: recolector
+  robot2: recolector
+  robot3: recolector
+  cordi: coordinador
+comenzar
+  AsignarArea(robot1,areaR1)
+  AsignarArea(robot2,areaR2)
+  AsignarArea(robot3,areaR3)
+  AsignarArea(cordi,areaCordi)
+  Iniciar(robot1,1,1)
+  Iniciar(robot2,2,1)
+  Iniciar(robot3,3,1)
+  Iniciar(cordi,4,4)
+fin

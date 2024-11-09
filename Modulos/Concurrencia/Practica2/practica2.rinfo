@@ -1,0 +1,79 @@
+programa ejercicio2
+procesos
+  proceso escalon(E alto: numero;ES flores:numero; ES papeles:numero)
+  comenzar
+    flores:= 0
+    papeles:= 0
+    repetir alto
+      avanzarJuntando(flores,papeles)
+    derecha
+    mover
+    arriba
+  fin
+  proceso avanzarJuntando(ES papeles:numero; ES flores:numero)
+  comenzar
+    tomarPapeles(papeles)
+    tomarFlores(flores)
+    mover
+  fin
+  proceso tomarPapeles(ES papeles:numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles+1
+  fin
+  proceso tomarFlores(ES flores:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores+1
+  fin
+  proceso arriba
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso analizar(ES cant:numero; E f: numero; E p:numero)
+  comenzar
+    si(f<p)
+      cant:= cant+1
+  fin
+areas
+  ciudad: AreaC(1,1,100,100)
+robots
+  robot robotEsclavo
+  variables
+    cant,alto,flores,papeles: numero
+  comenzar
+    cant:= 0
+    repetir 4
+      Random(alto,1,5)
+      escalon(alto,flores,papeles)
+      analizar(cant,flores,papeles)
+    EnviarMensaje(cant,roboJefe)
+  fin
+  robot robotJefe
+  variables
+    a1,a2,a3,tot:numero
+  comenzar
+    RecibirMensaje(a1,*)
+    RecibirMensaje(a2,*)
+    RecibirMensaje(a3,*)
+    tot:= a1+a2+a3
+    Informar(tot)
+  fin
+variables
+  robotardo1: robotEsclavo
+  robotardo2:robotEsclavo
+  robotardo3:robotEsclavo
+  roboJefe: robotJefe
+comenzar
+  AsignarArea(robotardo1,ciudad)
+  AsignarArea(robotardo2,ciudad)
+  AsignarArea(robotardo3,ciudad)
+  AsignarArea(roboJefe,ciudad)
+  Iniciar(robotardo1,2,1)
+  Iniciar(robotardo2,7,1)
+  Iniciar(robotardo3,12,1)
+  Iniciar(roboJefe,1,1)
+fin
