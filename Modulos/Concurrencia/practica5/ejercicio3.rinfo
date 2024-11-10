@@ -70,7 +70,7 @@ robots
     derecha
     mientras(PosAv<100)
       pasos:= 0
-      mientras((flores<10) & (pasos<15))
+      mientras((PosAv<100) & (flores<10) & (pasos<15))
         tomarFlores(flores)
         {atado con alambre}
         si (~HayFlorEnLaEsquina)
@@ -79,6 +79,9 @@ robots
       si(flores>0)  
         depositar(flores, caAux,avAux)
         flores:= 0
+    tomarFlores(flores)
+    si(flores>0)  
+      depositar(flores, caAux,avAux)
     EnviarMensaje(F, rc)
   fin
   
