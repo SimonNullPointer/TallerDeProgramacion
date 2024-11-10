@@ -1,4 +1,4 @@
-programa nombrePrograma
+programa ejercicio4
 procesos 
   proceso ir(E posX:numero; E posY:numero)
   comenzar

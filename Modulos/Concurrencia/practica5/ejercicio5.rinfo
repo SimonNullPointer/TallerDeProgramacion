@@ -1,0 +1,118 @@
+programa ejercicio5
+procesos
+  proceso conexion(E id:numero)
+  variables
+    deposito:numero
+  comenzar
+    Random(deposito,1,5)
+    si (id = 1)
+      conexion1(deposito)
+    sino 
+      si(id = 2)
+        conexion2(deposito)
+      sino 
+        conexion3(deposito)
+  fin
+  proceso conexion1(E deposito:numero)
+  variables
+    origenAv,origenCa:numero
+  comenzar
+    origenAv:= PosAv
+    origenCa:= PosCa
+    ir(100,1)
+    dejarPapeles(deposito)
+    volver(100,1,origenAv,origenCa)
+    EnviarMensaje(deposito,r1)
+  fin
+  proceso conexion2(E deposito:numero)
+  variables
+    origenAv,origenCa:numero
+  comenzar
+    origenAv:= PosAv
+    origenCa:= PosCa
+    ir(100,1)
+    dejarPapeles(deposito)
+    volver(100,1,origenAv,origenCa)
+    EnviarMensaje(deposito,r2)
+  fin
+  proceso conexion3(E deposito:numero)
+  variables
+    origenAv,origenCa:numero
+  comenzar
+    origenAv:= PosAv
+    origenCa:= PosCa
+    ir(100,1)
+    dejarPapeles(deposito)
+    volver(100,1,origenAv,origenCa)
+    EnviarMensaje(deposito,r3)
+  fin
+  proceso dejarPapeles(E n:numero)
+  comenzar
+    repetir n
+      depositarPapel
+  fin
+  proceso ir(E av:numero; E ca:numero)
+  comenzar
+    BloquearEsquina(av,ca)
+    Pos(av,ca)
+  fin
+  proceso volver(E esqX:numero; E esqY:numero; E av:numero; E ca:numero)  
+  comenzar
+    Pos(av,ca)
+    LiberarEsquina(esqX,esqY)
+  fin
+  
+areas
+  a1: AreaP(10,1,10,1)
+  a2: AreaP(11,1,11,1)
+  a3: AreaP(12,1,12,1)
+  aServer: AreaP(13,1,13,1)
+  deposito: AreaC(100,1,100,1)
+robots
+  robot cliente
+  variables
+    id, cantidad,origenAv,origenCa:numero
+  comenzar
+    origenAv:= PosAv
+    origenCa:= PosCa
+    RecibirMensaje(id,servidor)
+    repetir 4
+      EnviarMensaje(id,servidor)
+      RecibirMensaje(cantidad,servidor)
+      repetir cantidad
+        ir(100,1)
+        tomarPapel
+        volver(100,1,origenAv,origenCa)
+        depositarPapel
+  fin
+  robot robotServidor
+  variables
+    id,intentos:numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    intentos:= 12
+    repetir intentos
+      RecibirMensaje(id,*)
+      conexion(id)
+  fin
+variables
+  r1: cliente
+  r2: cliente
+  r3: cliente
+  servidor: robotServidor
+comenzar
+  AsignarArea(r1, a1)
+  AsignarArea(r2, a2)
+  AsignarArea(r3, a3)
+  AsignarArea(servidor, aServer)
+  AsignarArea(r1, deposito)
+  AsignarArea(r2, deposito)
+  AsignarArea(r3, deposito)
+  AsignarArea(servidor, deposito)
+  Iniciar(r1,10,1)
+  Iniciar(r2,11,1)
+  Iniciar(r3,12,1)
+  Iniciar(servidor,13,1)
+fin
