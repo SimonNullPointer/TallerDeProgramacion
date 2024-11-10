@@ -66,29 +66,19 @@ robots
     pasos,flores,avAux,caAux:numero
   comenzar
     flores:= 0
-    pasos:= 0
     caAux:= PosCa
     derecha
-    mientras(PosAv<90)
+    mientras(PosAv<100)
+      pasos:= 0
       mientras((flores<10) & (pasos<15))
         tomarFlores(flores)
-        {consultar, creo que está mal tirando a pesimo}
+        {atado con alambre}
         si (~HayFlorEnLaEsquina)
           mover
           pasos:= pasos+1
       si(flores>0)  
         depositar(flores, caAux,avAux)
         flores:= 0
-      si (pasos = 15)
-        pasos:= 0
-        
-    {atado con alambre}
-    repetir 9
-      tomarFlores(flores)
-      si (~HayFlorEnLaEsquina)
-          mover
-    tomarFlores(flores)
-    depositar(flores,caAux,avAux)
     EnviarMensaje(F, rc)
   fin
   

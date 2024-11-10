@@ -1,0 +1,109 @@
+programa nombrePrograma
+procesos 
+  proceso ir(E posX:numero; E posY:numero)
+  comenzar
+    BloquearEsquina(esqX,esqY)
+    Pos(esqX,esqY)
+  fin
+  proceso tomarFlores(ES cant:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      cant:= cant+1
+  fin
+  proceso volver(E esqX:numero; E esqY:numero; E origenAv: numero; E origenCa:numero)
+  comenzar
+    Pos(origenAv,origenCa)
+    LiberarEsquina(esqX,esqY)
+  fin
+  proceso dejarFlores(E cant:numero)
+  comenzar
+    repetir cant
+      depositarFlor
+  fin
+  
+areas
+  origenR1: AreaP(1,1,1,1)
+  origenR2: AreaP(2,1,2,1)
+  origenR3: AreaP(3,1,3,1)
+  origenFiscal: AreaP(4,1,4,1)
+  areaRecolectar: AreaPC(40,40,60,60)
+robots
+  robot recolector
+  variables
+    id,intentos, cant,esqX,esqY, origenAv,origenCa: numero
+  comenzar
+    origenAv:= PosAv
+    origenCa:= PosCa
+    cant:= 0
+    RecibirMensaje(id,alberto)
+    mientras(intentos<8)
+      RecibirMensaje(esqX,alberto)
+      RecibirMensaje(esqY,alberto)
+      ir(esqX,esqY)
+      si(HayFlorEnLaEsquina)
+        tomarFlores(cant)
+      sino
+        intentos:= intentos + 1
+      volver(esqX,esqY,origenAv,origenCa)
+      EnviarMensaje(V,alberto)
+    EnviarMensaje(F,alberto)
+    ir(10,10)
+    dejarFlores(cant)
+    volver(10,10,origenAv,origenCa)
+  fin
+  robot fiscal
+  variables
+    id,esqX,esqY,cant:numero
+    k1,k2,k3: boolean
+  comenzar
+    k1:= V
+    k2:= V
+    k3:= V
+    cant:= 0
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    mientras((k1)|(k2)|(k3))
+      Random(esqX,20,60)
+      Random(esqY,20,60)
+      Random(id,1,3)
+      si (id = 1) & (k1)
+        EnviarMensaje(esqX,r1)
+        EnviarMensaje(esqY,r1)
+        RecibirMensaje(k1,r1)
+      sino
+        si(id = 2) & (k2)
+          EnviarMensaje(esqX,r2)
+          EnviarMensaje(esqY,r2)
+          RecibirMensaje(k2,r2)
+        sino 
+          si (id = 3) & (k3)
+            EnviarMensaje(esqX,r3)
+            EnviarMensaje(esqY,r3)
+            RecibirMensaje(k3,r3)
+    Pos(10,10)
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      cant:= cant + 1
+    Informar(cant)    
+  fin
+  
+variables
+  r1: recolector
+  r2: recolector
+  r3: recolector
+  alberto: fiscal
+comenzar
+  AsignarArea(alberto,origenFiscal)
+  AsignarArea(r1,origenR1)
+  AsignarArea(r2,origenR2)
+  AsignarArea(r3,origenR3)
+  AsignarArea(r1,areaRecolectar)
+  AsignarArea(r2,areaRecolectar)
+  AsignarArea(r3,areaRecolectar)
+  Iniciar(r1,1,1)
+  Iniciar(r1,2,1)
+  Iniciar(r1,3,1)
+  Iniciar(alberto,4,1)
+fin
